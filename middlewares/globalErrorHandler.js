@@ -1,4 +1,4 @@
-export const globalErrorHandler = async(req , res , next , err) =>{
+export const globalErrorHandler = async(err, req , res , next) =>{
     console.log(err.stack);
 
     return res.status(err.statusCode || 500).json({

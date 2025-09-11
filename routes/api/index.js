@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authorRouter } from "./authors";
+import { authorRouter } from "./authors.js";
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-import { body } from 'express-validation';
+import { body } from 'express-validator';
 
 export const createAuthorValidation = [
     body("email")
