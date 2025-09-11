@@ -3,11 +3,6 @@ import {execute, fetchFirst} from "../utils/dbRunMethodWrapper.js";
 
 export const createAuthor = asyncHandler(async(req , res) =>{
     const { name , email} = req.body;
-    if(!email || !name){
-        const error = new Error('Name and email not present');
-        error.statusCode = 400;
-        throw error;
-    }
     const checkSql = `SELECT * FROM authors WHERE email = ?`;
     const existing = await fetchFirst(db, checkSql, [email]);
     if (existing.length > 0) {
