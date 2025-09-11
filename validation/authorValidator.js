@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 
 export const createAuthorValidation = [
     body("email")
@@ -9,6 +9,14 @@ export const createAuthorValidation = [
         .withMessage('Please enter a valid email address'),
     
     body("name")
+        .trim()
+        .escape()
+        .isLength({min : 2})
+        .withMessage('Author name must be greater than 2 characters')
+]
+
+export const getAuthorValidation = [
+    query("name")
         .trim()
         .escape()
         .isLength({min : 2})
