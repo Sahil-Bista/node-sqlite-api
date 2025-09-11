@@ -17,6 +17,7 @@ export const createAuthorValidation = [
 
 export const getAuthorValidation = [
     query("name")
+        .optional()
         .trim()
         .escape()
         .isLength({min : 2})

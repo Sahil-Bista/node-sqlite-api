@@ -21,7 +21,7 @@ export const getAllAuthors = asyncHandler(async(req,res)=>{
     let sql = `SELECT * FROM authors`;
     const params = []
     if(name){
-        sql+= `WHERE authors.name LIKE ?`;
+        sql+= ` WHERE authors.name LIKE ?`;
         params.push(`%${name}%`)
     };
     const authors = await fetchAll(db, sql, params);
