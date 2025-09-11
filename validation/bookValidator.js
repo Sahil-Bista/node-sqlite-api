@@ -1,6 +1,6 @@
 import { body } from 'express-validator';
 
-export const validateBook = [
+export const validateCreateBook = [
   body('title')
     .trim()
     .escape()
