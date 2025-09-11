@@ -1,0 +1,21 @@
+import { asyncHandler } from "../utils/asyncWrapper.js";
+import {execute, fetchFirst} from "../utils/dbRunMethodWrapper.js";
+
+export const createAuthor = asyncHandler(async(req , res) =>{
+    const { name , email} = req.body;
+    if(!email || !name){
+        const error = new Error('Name and email not present');
+        error.statusCode = 400;
+        throw error;
+    }
+    const checkSql = `SELECT * FROM authors WHERE email = ?`;
+    const existing = await fetchFirst(db, checkSql, [email]);
+    if (existing.length > 0) {
+        const error = new Error("Author with this email already exists");
+        error.statusCode = 409; 
+        throw error;
+    }
+    const sql = `INSERT INTO authors(name, email) VALUES (?,?)`;
+    await execute(db, sql, [name, email]);
+    return res.status(200).json({msg:'Author created successfully'})
+});
