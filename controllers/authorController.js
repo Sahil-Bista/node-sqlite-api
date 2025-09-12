@@ -17,13 +17,20 @@ export const createAuthor = asyncHandler(async(req , res) =>{
 });
 
 export const getAllAuthors = asyncHandler(async(req,res)=>{
-    const {name} = req.query;
-    let sql = `SELECT * FROM authors`;
+    let {name , order} = req.query;
+    order = order && order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    let sql = `
+        SELECT authors.*, COUNT(books.id) AS books_count FROM authors 
+        LEFT JOIN books
+        ON authors.id = books.author_id
+    `
     const params = []
     if(name){
         sql+= ` WHERE authors.name LIKE ?`;
         params.push(`%${name}%`)
     };
+    sql += ` GROUP BY authors.id`;
+    sql+= ` ORDER BY books_count ${order}`;
     const authors = await fetchAll(db, sql, params);
     if(!authors || authors.length==0){
         return res.status(204).json({msg:"No any authors in the list yet"});
