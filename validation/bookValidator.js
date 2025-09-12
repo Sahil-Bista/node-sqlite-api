@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 
 export const validateCreateBook = [
   body('title')
@@ -15,7 +15,6 @@ export const validateCreateBook = [
     .withMessage('ISBN must contain only digits'),
 
   body('published_year')
-    .optional() 
     .isInt({ min: 1000, max: 9999 })
     .withMessage('Published year must be a 4-digit number representing a valid year'),
 
@@ -24,3 +23,48 @@ export const validateCreateBook = [
     .isInt({ min: 1 })
     .withMessage('Author ID must be a positive integer'),
 ];
+
+export const getAllBooksValidator = [
+  query('title')
+    .optional()
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('Title is required'),
+  
+  query('year')
+    .optional()
+    .isInt({ min: 1000, max: 9999 })
+    .withMessage('Published year must be a 4-digit number representing a valid year'),
+  
+  query('order')
+    .optional()
+    //custom always runs even with .optional()
+    .custom((order) => {
+      if (!order) return true;
+      const allowedOrders = ['ASC', 'DESC'];
+      if (!allowedOrders.includes(order.toUpperCase())) {
+        throw new Error('Order must be either ASC or DESC');
+      }
+      return true;
+    }),
+  
+  query('sort')
+    .optional()
+    .custom((sort)=>{
+      if(!sort) return true;
+      const allowedFields = ['title','published_year','created_at'];
+      if(!allowedFields.includes(sort)){
+        throw new Error('Sorting can only be done by one of the fields from : title, published_year or created_at')
+      }
+      return true;
+    }),
+
+  query('author')
+    .optional()
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('Author name is required'),
+
+]

@@ -70,3 +70,54 @@ export const getAllBooks = asyncHandler(async(req, res)=>{
     }
     return res.status(200).json({msg:'books retreiveed sucessfully', data : books});
 })
+
+export const updateBooks = asyncHandler(async(req,res)=>{
+    const {id} = req.params;
+    const { title, isbn , published_year, author_id} = req.body;
+    const findBookSQL = `
+        SELECT * FROM books
+        WHERE id = ?
+    ` 
+    const foundBook = await fetchFirst(db, findBookSQL, [id]);
+    console.log(foundBook);
+    if(!foundBook){
+        const error = new Error(`No such book with id ${id} exists in the books table`);
+        error.statusCode = 400; 
+        throw error;
+    } 
+    let updateSQL = 'UPDATE books'
+    const params = []
+    const searchFields = []
+    if (title) {
+        searchFields.push(`title = ?`);
+        params.push(`${title}`);
+    }
+    if(isbn){
+        const findDuplicateSQL = `
+            SELECT * FROM books
+            WHERE isbn = ?
+        ` 
+        const duplicateBook = await fetchFirst(db, findBookSQL, [isbn]);
+        if(duplicateBook){
+            const error = new Error("Book with this isbn already exists, update it to something else");
+            error.statusCode = 409; 
+            throw error;
+        }
+        searchFields.push(`isbn = ?`)
+        params.push(`${isbn}`);
+    }
+    if(published_year){
+        searchFields.push(`published_year = ?`)
+        params.push(`${published_year}`);
+    }
+    if(author_id){
+        searchFields.push(`author_id = ?`)
+        params.push(`${author_id}`);
+    }
+    if(searchFields.length>0){
+        updateSQL += ` SET ` + searchFields.join(', ');
+    }
+    updateSQL += ` WHERE id = ?`
+    params.push(id); await execute(db, updateSQL, params) ;
+    return res.status(200).json({msg:'Book updated successfully'});
+})
