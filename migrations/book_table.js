@@ -5,7 +5,7 @@ db.run(`
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             isbn TEXT UNIQUE NOT NULL,
-            published_year INTEGER,
+            published_year INTEGER NOT NULL,
             author_id INTEGER NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (author_id) REFERENCES authors(id)
