@@ -97,7 +97,7 @@ export const updateBooks = asyncHandler(async(req,res)=>{
             SELECT * FROM books
             WHERE isbn = ?
         ` 
-        const duplicateBook = await fetchFirst(db, findBookSQL, [isbn]);
+        const duplicateBook = await fetchFirst(db, findDuplicateSQL, [isbn]);
         if(duplicateBook){
             const error = new Error("Book with this isbn already exists, update it to something else");
             error.statusCode = 409; 

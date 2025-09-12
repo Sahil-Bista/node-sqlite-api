@@ -1,4 +1,4 @@
-import { body, query } from 'express-validator';
+import { body, query, param } from 'express-validator';
 
 export const validateCreateBook = [
   body('title')
@@ -66,5 +66,39 @@ export const getAllBooksValidator = [
     .escape()
     .notEmpty()
     .withMessage('Author name is required'),
+]
 
+export const updateBooksValidator = [
+  param('id')
+    .exists()
+    .withMessage('ID is required')                                        
+    .isInt({ gt: 0 })
+    .withMessage('ID must be a positive integer') 
+    .toInt(),
+
+  body('title')
+    .optional()
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage('Title is required'),
+  
+  body('isbn')
+    .optional()
+    .notEmpty()
+    .isLength({ min: 10, max: 10 })
+    .withMessage('ISBN must be exactly 10 digits')
+    .matches(/^\d{10}$/)
+    .withMessage('ISBN must contain only digits'),
+
+  body('published_year')
+    .optional()
+    .isInt({ min: 1000, max: 9999 })
+    .withMessage('Published year must be a 4-digit number representing a valid year'),
+
+  body('author_id')
+    .optional()
+    .notEmpty()
+    .isInt({ min: 1 })
+    .withMessage('Author ID must be a positive integer'),
 ]
