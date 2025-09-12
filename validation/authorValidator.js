@@ -21,5 +21,16 @@ export const getAuthorValidation = [
         .trim()
         .escape()
         .isLength({min : 2})
-        .withMessage('Author name must be greater than 2 characters')
+        .withMessage('Author name must be greater than 2 characters'),
+    
+    query("order")
+    .optional()
+    .custom((order) => {
+      if (!order) return true;
+      const allowedOrders = ['ASC', 'DESC'];
+      if (!allowedOrders.includes(order.toUpperCase())) {
+        throw new Error('Order must be either ASC or DESC');
+      }
+      return true;
+    }),
 ]
