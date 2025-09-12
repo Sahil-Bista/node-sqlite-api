@@ -35,14 +35,24 @@ export const createBooks = asyncHandler(async(req, res)=>{
 export const getAllBooks = asyncHandler(async(req, res)=>{
     let { title , year , order, sort} = req.query;
     order = order && order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'; 
-    let sql = `SELECT *FROM books`;
+    let sql = `SELECT * FROM books`;
     const params = [];
-    if(title){
+    if(title && year){
+        sql += ` WHERE books.title LIKE ? AND books.published_year = ?`; 
+        params.push(`%${title}%`);
+        params.push(`${year}`);
+    }
+    if(title && !year){
         sql += ` WHERE books.title LIKE ?`;
         params.push(`%${title}%`);
     }
-    if(sort == "byYear"){
-        sql += ` ORDER BY published_year ${order}`;
+    if(year && !title){
+        sql += ` WHERE books.published_year = ?`
+        params.push(`${year}`);
+    }
+    const sortBy = ["title", "published_year", "created_at"];
+    if (sort && sortBy.includes(sort)) {
+        sql += ` ORDER BY ${sort} ${order}`;
     }
     const books = await fetchAll(db, sql, params);
     if(!books || books.length==0){
