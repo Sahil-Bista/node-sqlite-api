@@ -1,5 +1,5 @@
 import { asyncHandler } from "../utils/asyncWrapper.js";
-import { execute, fetchFirst } from "../utils/dbRunMethodWrapper.js";
+import { execute, fetchFirst, fetchAll} from "../utils/dbRunMethodWrapper.js";
 import db from '../config/connDB.js';
 
 export const createBooks = asyncHandler(async(req, res)=>{
@@ -30,5 +30,23 @@ export const createBooks = asyncHandler(async(req, res)=>{
     (?,?,?,?)`
     await execute(db, sql, [title, isbn, published_year, author_id]);
     return res.status(200).json({msg:'Book created successfully'});
-
 });
+
+export const getAllBooks = asyncHandler(async(req, res)=>{
+    let { title , year , order, sort} = req.query;
+    order = order && order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'; 
+    let sql = `SELECT *FROM books`;
+    const params = [];
+    if(title){
+        sql += ` WHERE books.title LIKE ?`;
+        params.push(`%${title}%`);
+    }
+    if(sort == "byYear"){
+        sql += ` ORDER BY published_year ${order}`;
+    }
+    const books = await fetchAll(db, sql, params);
+    if(!books || books.length==0){
+        return res.status(204).json({msg:"No any books in the list yet"});
+    }
+    return res.status(200).json({msg:'books retreiveed sucessfully', data : books});
+})
