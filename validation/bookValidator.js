@@ -68,6 +68,15 @@ export const getAllBooksValidator = [
     .withMessage('Author name is required'),
 ]
 
+export const getSingleBookValidator = [
+  param("bookId")
+    .exists()
+    .withMessage('ID is required')                                        
+    .isInt({ gt: 0 })
+    .withMessage('ID must be a positive integer') 
+    .toInt(),
+]
+
 export const updateBooksValidator = [
   param('id')
     .exists()

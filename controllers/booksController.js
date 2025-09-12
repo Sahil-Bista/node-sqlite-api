@@ -71,6 +71,25 @@ export const getAllBooks = asyncHandler(async(req, res)=>{
     return res.status(200).json({msg:'books retreiveed sucessfully', data : books});
 })
 
+export const getSingleBook = asyncHandler(async(req,res)=>{
+    const {bookId} = req.params;
+    const findBookSQL = `
+        SELECT 
+        authors.id AS author_id,authors.name, authors.email, authors.cretated_at AS author_created_at,
+        books.id AS book_id,books.title,books.isbn,books.published_year,books.created_at AS book_created_at
+        FROM authors
+        JOIN books ON authors.id = books.author_id
+        WHERE authors.id = ?
+    `;
+    const book = await fetchFirst(db, findBookSQL, [bookId]);
+    if(!book){
+        const error = new Error(`No book with id ${bookId} exists in the books table`);
+        error.statusCode = 404; 
+        throw error;
+    }
+    return res.status(200).json({msg:'book retreived sucessfully', data : book});
+})
+
 export const updateBooks = asyncHandler(async(req,res)=>{
     const {id} = req.params;
     const { title, isbn , published_year, author_id} = req.body;
