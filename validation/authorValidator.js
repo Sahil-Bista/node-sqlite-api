@@ -1,4 +1,4 @@
-import { body, query } from 'express-validator';
+import { body, query, param } from 'express-validator';
 
 export const createAuthorValidation = [
     body("email")
@@ -33,4 +33,13 @@ export const getAuthorValidation = [
       }
       return true;
     }),
+]
+
+export const getSingleAuthorValidation = [
+    param("authorId")
+      .exists()
+      .withMessage('ID is required')                                        
+      .isInt({ gt: 0 })
+      .withMessage('ID must be a positive integer') 
+      .toInt(),
 ]

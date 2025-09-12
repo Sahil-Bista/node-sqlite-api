@@ -35,5 +35,41 @@ export const getAllAuthors = asyncHandler(async(req,res)=>{
     if(!authors || authors.length==0){
         return res.status(204).json({msg:"No any authors in the list yet"});
     }
-    return res.status(200).json({msg:'Authors retreiveed sucessfully', data : authors});
+    return res.status(200).json({msg:'Authors retreived sucessfully', data : authors});
+});
+
+
+export const getSingleAuthor = asyncHandler(async(req,res)=>{
+    let {authorId} = req.params;
+    const sql = `
+        SELECT 
+        authors.id AS author_id,authors.name, authors.email, authors.cretated_at AS author_created_at,
+        books.id AS book_id,books.title,books.isbn,books.published_year,books.created_at AS book_created_at
+        FROM authors
+        LEFT JOIN books ON authors.id = books.author_id
+        WHERE authors.id = ?
+    `;
+    const author = await fetchAll(db, sql, [authorId]);
+    if(author.length == 0){
+        const error = new Error(`Author with the given id ${authorId} does not exist`);
+        error.statusCode = 404; 
+        throw error;
+    }
+    console.log(author);
+    const formattedAuthor = {
+        id: author[0].author_id,
+        name: author[0].name,
+        email: author[0].email,
+        created_at: author[0].author_cretated_at,
+        books: author
+        .filter(author => author.book_id !== null)
+        .map(row => ({
+            id: row.book_id,
+            title: row.title,
+            isbn: row.isbn,
+            published_year: row.published_year,
+            created_at: row.book_created_at
+        }))
+    };
+    return res.status(200).json({msg:'Author retreived sucessfully', data : formattedAuthor});
 });
