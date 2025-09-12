@@ -33,7 +33,11 @@ export const createBooks = asyncHandler(async(req, res)=>{
 });
 
 export const getAllBooks = asyncHandler(async(req, res)=>{
-    let { title , year , order, sort, author} = req.query;
+    let { title , year , order, sort, author, page, limit} = req.query;
+    page = parseInt(page) > 0 ? parseInt(page) : 1,
+    limit = parseInt(limit) > 0 ? parseInt(limit) : 10;
+    const startIndex  = (page -1 ) * limit;
+
     order = order && order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'; 
     let sql = `SELECT books.*,authors.name AS author FROM books
     JOIN authors 
@@ -64,6 +68,8 @@ export const getAllBooks = asyncHandler(async(req, res)=>{
     if (sort && sortBy.includes(sort)) {
         sql += ` ORDER BY ${sort} ${order}`;
     }
+    sql += ` LIMIT ? OFFSET ?`;
+    params.push(limit, startIndex);
     const books = await fetchAll(db, sql, params);
     if(!books || books.length==0){
         return res.status(204).json({msg:"No any books in the list yet"});

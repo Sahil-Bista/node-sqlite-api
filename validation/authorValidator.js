@@ -1,18 +1,18 @@
 import { body, query, param } from 'express-validator';
 
 export const createAuthorValidation = [
-    body("email")
-        .trim()
-        .normalizeEmail()
-        .notEmpty()
-        .isEmail()
-        .withMessage('Please enter a valid email address'),
-    
-    body("name")
-        .trim()
-        .escape()
-        .isLength({min : 2})
-        .withMessage('Author name must be greater than 2 characters')
+  body("email")
+      .trim()
+      .normalizeEmail()
+      .notEmpty()
+      .isEmail()
+      .withMessage('Please enter a valid email address'),
+  
+  body("name")
+      .trim()
+      .escape()
+      .isLength({min : 2})
+      .withMessage('Author name must be greater than 2 characters')
 ]
 
 export const getAuthorValidation = [
@@ -34,19 +34,19 @@ export const getAuthorValidation = [
       return true;
     }),
 
-    query('page')
-      .optional()
-      .trim()
-      .isInt({gt : 0})
-      .withMessage('Page number must be greater than 0')
-      .toInt(),
-    
-    query('limit')
-      .optional()
-      .trim()
-      .isInt({git : 0})
-      .withMessage('Limit  must be greater than 0')
-      .toInt()
+  query('page')
+    .optional()
+    .trim()
+    .isInt({gt : 0})
+    .withMessage('Page number must be greater than 0')
+    .toInt(),
+  
+  query('limit')
+    .optional()
+    .trim()
+    .isInt({git : 0})
+    .withMessage('Limit  must be greater than 0')
+    .toInt()
 ]
 
 export const getSingleAuthorValidation = [
