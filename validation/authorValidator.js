@@ -33,6 +33,20 @@ export const getAuthorValidation = [
       }
       return true;
     }),
+
+    query('page')
+      .optional()
+      .trim()
+      .isInt({gt : 0})
+      .withMessage('Page number must be greater than 0')
+      .toInt(),
+    
+    query('limit')
+      .optional()
+      .trim()
+      .isInt({git : 0})
+      .withMessage('Limit  must be greater than 0')
+      .toInt()
 ]
 
 export const getSingleAuthorValidation = [

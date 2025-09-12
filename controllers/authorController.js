@@ -17,8 +17,12 @@ export const createAuthor = asyncHandler(async(req , res) =>{
 });
 
 export const getAllAuthors = asyncHandler(async(req,res)=>{
-    let {name , order} = req.query;
+    let {name , order , page, limit} = req.query;
     order = order && order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+    page = parseInt(page) > 0 ? parseInt(page) : 1;
+    limit = parseInt(limit) > 0 ? parseInt(limit) : 10;
+    const startIndex  = (page -1 ) * limit;
+    
     let sql = `
         SELECT authors.*, COUNT(books.id) AS books_count FROM authors 
         LEFT JOIN books
@@ -30,12 +34,22 @@ export const getAllAuthors = asyncHandler(async(req,res)=>{
         params.push(`%${name}%`)
     };
     sql += ` GROUP BY authors.id`;
-    sql+= ` ORDER BY books_count ${order}`;
+    sql += ` ORDER BY books_count ${order}`;
+    sql += ` LIMIT ? OFFSET ?`
+    params.push(limit, startIndex);
     const authors = await fetchAll(db, sql, params);
     if(!authors || authors.length==0){
         return res.status(204).json({msg:"No any authors in the list yet"});
     }
-    return res.status(200).json({msg:'Authors retreived sucessfully', data : authors});
+    return res.status(200).json({
+        msg:'Authors retreived sucessfully',
+        data : authors,
+        pagination : {
+            page : page,
+            limit : limit,
+            count : authors.length
+        }
+    });
 });
 
 
