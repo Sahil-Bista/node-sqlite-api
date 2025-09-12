@@ -33,22 +33,32 @@ export const createBooks = asyncHandler(async(req, res)=>{
 });
 
 export const getAllBooks = asyncHandler(async(req, res)=>{
-    let { title , year , order, sort} = req.query;
+    let { title , year , order, sort, author} = req.query;
     order = order && order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC'; 
-    let sql = `SELECT * FROM books`;
+    let sql = `SELECT books.*,authors.name AS author FROM books
+    JOIN authors 
+    ON books.author_id = authors.id`;
     const params = [];
+    const searchFields = [];
     if(title && year){
         sql += ` WHERE books.title LIKE ? AND books.published_year = ?`; 
         params.push(`%${title}%`);
         params.push(`${year}`);
     }
-    if(title && !year){
-        sql += ` WHERE books.title LIKE ?`;
+    if (title) {
+        searchFields.push(`books.title LIKE ?`);
         params.push(`%${title}%`);
     }
-    if(year && !title){
-        sql += ` WHERE books.published_year = ?`
+    if(year){
+        searchFields.push(`books.published_year = ?`)
         params.push(`${year}`);
+    }
+    if(author){
+        searchFields.push(`authors.name LIKE ?`)
+        params.push(`%${author}%`);
+    }
+    if(searchFields.length>0){
+        sql+= ` WHERE ` + searchFields.join(' AND ');
     }
     const sortBy = ["title", "published_year", "created_at"];
     if (sort && sortBy.includes(sort)) {
