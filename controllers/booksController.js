@@ -99,6 +99,11 @@ export const getSingleBook = asyncHandler(async(req,res)=>{
 export const updateBooks = asyncHandler(async(req,res)=>{
     const {id} = req.params;
     const { title, isbn , published_year, author_id} = req.body;
+    if (!title && !isbn && !published_year && !author_id) {
+        const error = new Error("At least one field must be provided to update");
+        error.statusCode = 400;
+        throw error;
+    }
     const findBookSQL = `
         SELECT * FROM books
         WHERE id = ?
