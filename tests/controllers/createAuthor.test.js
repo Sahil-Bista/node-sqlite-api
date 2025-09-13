@@ -1,8 +1,7 @@
-import { beforeEach, describe } from "node:test";
 import { createAuthor } from "../../controllers/authorController.js";
 import * as dbHelpers from '../../utils/dbRunMethodWrapper.js'
 
-jest.mock('../utils/dbRunMethodWrapper.js');
+jest.mock('../../utils/dbRunMethodWrapper.js');
 
 describe('createAuthor unit tests', ()=>{
     let req;
