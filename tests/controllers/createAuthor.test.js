@@ -51,7 +51,7 @@ describe('createAuthor unit tests', ()=>{
             statusCode: 409,
         });
 
-            expect(dbHelpers.fetchFirst).toHaveBeenCalledWith(
+        expect(dbHelpers.fetchFirst).toHaveBeenCalledWith(
             expect.anything(),
             'SELECT * FROM authors WHERE email = ?',
             ['test@gmail.com']
