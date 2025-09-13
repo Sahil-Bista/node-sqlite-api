@@ -44,7 +44,7 @@ describe('createAuthor unit tests', ()=>{
     })
 
     test('throw error if the email already exists', async()=>{
-        dbHelpers.fetchFirst.mockResolvedValue({ name : 'Test', email : 'test@gmail.com'});
+        dbHelpers.fetchFirst.mockResolvedValue({ id : 1, name : 'Test', email : 'test@gmail.com', createdAt : '2025-09-12 06:47:02' });
 
         await expect(createAuthor(req, res)).rejects.toMatchObject({
             message: 'Author with this email already exists',
