@@ -50,10 +50,12 @@ describe('Create Books test',()=>{
 
     test('Throw 409 if book already exists',async()=>{
         dbHelper.fetchAll.mockResolvedValue([{
+                id : 1,
                 title : 'Test',
                 isbn : '1234567890',
                 published_year : 1996 , 
-                author_id : 1
+                author_id : 1,
+                created_at : '2025-09-12 06:47:02',
             }]);
         
         await createBooks(req,res);
