@@ -14,7 +14,7 @@ export const authorRouter = Router();
 
 /**
  * @swagger
- * /author:
+ * /authors:
  *   get:
  *     summary: Get list of all authors along with thier book count
  *     description: retrieve a list of authors with optional filtering by different categories
@@ -102,7 +102,13 @@ export const authorRouter = Router();
  *                 example: author1
  *               email: 
  *                 type: string
- *                 example: one@gmail.com     
+ *                 example: one@gmail.com   
+ *                 description : must be unique
+ *               cretated_at: 
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2025-09-14T06:47:02Z"
+ *                 description: Optional.
  *     responses: 
  *       200: 
  *         description: Author created successfully
@@ -120,7 +126,7 @@ export const authorRouter = Router();
 
 /**
  * @swagger
- * /author/{authorId}:
+ * /authors/{authorId}:
  *   get:
  *     summary: Get a single author by ID
  *     description: Retrieve a single author and their associated books from the database.

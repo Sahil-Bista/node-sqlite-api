@@ -83,7 +83,7 @@ export const getAllBooksValidator = [
 ]
 
 export const getSingleBookValidator = [
-  param("bookId")
+  param("id")
     .exists()
     .withMessage('ID is required')                                        
     .isInt({ gt: 0 })

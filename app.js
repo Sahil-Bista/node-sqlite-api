@@ -3,7 +3,7 @@ import router from './routes/api/index.js';
 import { globalErrorHandler } from './middlewares/globalErrorHandler.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerOptions from './swagger.json' assert {type : "json"};
+import swaggerOptions from './swagger.json' with {type : "json"};
 
 const app = express();
 

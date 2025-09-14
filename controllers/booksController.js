@@ -78,7 +78,7 @@ export const getAllBooks = asyncHandler(async(req, res)=>{
 })
 
 export const getSingleBook = asyncHandler(async(req,res)=>{
-    const {bookId} = req.params;
+    const {id} = req.params;
     const findBookSQL = `
         SELECT 
         authors.id AS author_id,authors.name, authors.email, authors.cretated_at AS author_created_at,
@@ -87,9 +87,9 @@ export const getSingleBook = asyncHandler(async(req,res)=>{
         JOIN books ON authors.id = books.author_id
         WHERE authors.id = ?
     `;
-    const book = await fetchFirst(db, findBookSQL, [bookId]);
+    const book = await fetchFirst(db, findBookSQL, [id]);
     if(!book){
-        const error = new Error(`No book with id ${bookId} exists in the books table`);
+        const error = new Error(`No book with id ${id} exists in the books table`);
         error.statusCode = 404; 
         throw error;
     }
