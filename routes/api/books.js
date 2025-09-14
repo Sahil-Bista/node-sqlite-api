@@ -16,7 +16,7 @@ export const bookRouter = Router();
  * @swagger
  * /books:
  *   get:
- *     summary: Get list of all books along with thier author's name
+ *     summary: Get list of all books along with their author's name
  *     description: retrieve a list of books along with thier author names with optional filtering by different categories
  *     tags: [Books]
  *     parameters: 
@@ -25,7 +25,7 @@ export const bookRouter = Router();
  *         schema: 
  *           type: string
  *         description: Filter books by title
- *      - in: query
+ *       - in: query
  *         name: year
  *         schema: 
  *           type: integer
@@ -168,11 +168,11 @@ export const bookRouter = Router();
  *                 name: "J.K. Rowling"
  *                 email: "jk.rowling@gmail.com"
  *                 author_created_at: "2025-09-12T06:47:02Z"
- *                 books_id:1
+ *                 books_id: 1
  *                 title: Game Of Thrones
  *                 isbn: 1234567890
  *                 published_year: 2026
- *                 author_created_at: "2025-09-12T06:47:02Z"
+ *                 book_created_at: "2025-09-12T06:47:02Z"
  *       404:
  *         description: Book not found
  *         content:
