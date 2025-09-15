@@ -1,6 +1,0 @@
-[2025-09-15 13:17:31] INFO: Attempting to retrieve book and book author info for book with id 10
-[2025-09-15 13:17:31] WARN: Book with id 10 does not exist
-[2025-09-15 13:26:02] INFO: Attempting to create author with unique emal : haha3@gmail.com
-[2025-09-15 13:26:02] INFO: Author created successfully, email : haha3@gmail.com name: haha
-[2025-09-15 13:28:12] INFO: Fetching authors | filters: name=any, order=ASC, page=2, limit=3
-[2025-09-15 13:28:12] INFO: Authors retrived successfully | counts = 3
