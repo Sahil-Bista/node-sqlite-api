@@ -1,0 +1,2 @@
+[2025-09-15 13:17:31] INFO: Attempting to retrieve book and book author info for book with id 10
+[2025-09-15 13:17:31] WARN: Book with id 10 does not exist
